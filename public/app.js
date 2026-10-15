@@ -9,6 +9,10 @@ let datos = null;
 let fuente = 'ia';
 let iaCargando = false;
 
+// En GitHub Pages no hay servidor: GitHub Actions publica cada hora un JSON
+// con las fuentes y el análisis de la IA ya hecho.
+const ESTATICO = location.hostname.endsWith('github.io');
+
 // Códigos WMO de Open-Meteo → icono y descripción.
 const WMO = {
   0: ['☀️', 'Despejado'], 1: ['🌤️', 'Mayormente despejado'], 2: ['⛅', 'Parcialmente nublado'],
@@ -205,10 +209,11 @@ async function cargar(forzar = false) {
   const btn = $('#btn-actualizar');
   btn.classList.add('girando');
   try {
-    const res = await fetch('/api/pronostico' + (forzar ? '?actualizar' : ''));
+    const url = ESTATICO ? 'data/pronostico.json?t=' + Date.now() : 'api/pronostico' + (forzar ? '?actualizar' : '');
+    const res = await fetch(url, { cache: 'no-store' });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || 'Error del servidor');
-    datos = { ...json, ia: datos?.ia };
+    datos = ESTATICO ? json : { ...json, ia: datos?.ia };
     guardar();
     pintarTodo();
   } catch (e) {
@@ -219,7 +224,7 @@ async function cargar(forzar = false) {
   } finally {
     btn.classList.remove('girando');
   }
-  if (datos) cargarIA(forzar);
+  if (datos && !ESTATICO) cargarIA(forzar);
 }
 
 // La IA tarda más, así que se pide aparte y se pinta cuando llega.
@@ -229,7 +234,7 @@ async function cargarIA(forzar) {
   pintarIA();
   if (fuente === 'ia') pintarDias();
   try {
-    const res = await fetch('/api/ia' + (forzar ? '?actualizar' : ''));
+    const res = await fetch('api/ia' + (forzar ? '?actualizar' : ''));
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || 'Error del servidor');
     datos.ia = json;
