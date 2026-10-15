@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f3b4c">
+  <meta name="description" content="Pronóstico del clima para Huauchinango, Puebla, con datos de Open-Meteo, SMN e IA.">
+  <title>Clima Huauchinango</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icono.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icono.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="encabezado">
+    <div>
+      <h1>Huauchinango</h1>
+      <p class="sub">Puebla · <span id="actualizado">cargando…</span></p>
+    </div>
+    <button id="btn-actualizar" class="btn-icono" aria-label="Actualizar">⟳</button>
+  </header>
+
+  <main id="contenido">
+    <section class="tarjeta actual" id="actual">
+      <div class="esqueleto" style="height:120px"></div>
+    </section>
+
+    <section class="tarjeta ia" id="ia" hidden></section>
+
+    <section id="alertas"></section>
+
+    <section class="tarjeta">
+      <h2>Próximas horas</h2>
+      <div class="horas" id="horas"></div>
+    </section>
+
+    <section class="tarjeta">
+      <div class="titulo-fila">
+        <h2>Próximos días</h2>
+        <div class="selector" role="tablist">
+          <button class="activo" data-fuente="ia">IA</button>
+          <button data-fuente="om">Open-Meteo</button>
+          <button data-fuente="smn">SMN</button>
+        </div>
+      </div>
+      <ul class="dias" id="dias"></ul>
+    </section>
+
+    <p class="pie">
+      Datos: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> ·
+      <a href="https://smn.conagua.gob.mx" target="_blank" rel="noopener">SMN / CONAGUA</a> ·
+      análisis con Gemini.<br>
+      El pronóstico de IA es una síntesis de las fuentes; ante alertas, consulta a Protección Civil.
+    </p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

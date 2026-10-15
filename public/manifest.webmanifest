@@ -1,0 +1,15 @@
+{
+  "name": "Clima Huauchinango",
+  "short_name": "Clima Huauch.",
+  "description": "Pronóstico del clima para Huauchinango, Puebla, con Open-Meteo, SMN e IA.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f3b4c",
+  "theme_color": "#0f3b4c",
+  "icons": [
+    { "src": "icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
