@@ -1,6 +1,6 @@
 // Service worker: guarda la interfaz para abrir la app sin conexión.
 // El pronóstico siempre se pide a la red; app.js conserva el último en localStorage.
-const VERSION = 'clima-v3';
+const VERSION = 'clima-v4';
 const ARCHIVOS = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icono.svg'];
 
 self.addEventListener('install', (e) => {

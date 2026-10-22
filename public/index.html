@@ -55,5 +55,17 @@
   </main>
 
   <script src="app.js"></script>
+  <script>
+    // En ES5 a propósito: si el navegador es muy viejo para app.js, avisa en lugar de quedarse en «cargando…».
+    setTimeout(function () {
+      var s = document.getElementById('actualizado');
+      if (s && s.textContent === 'cargando…') {
+        s.textContent = 'no cargó';
+        document.getElementById('actual').innerHTML =
+          '<p class="vacio">La app no pudo iniciar. Actualiza tu navegador (Chrome o Safari recientes) ' +
+          'o borra los datos de este sitio y vuelve a abrirlo.</p>';
+      }
+    }, 30000);
+  </script>
 </body>
 </html>

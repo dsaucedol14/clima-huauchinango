@@ -210,17 +210,21 @@ async function cargar(forzar = false) {
   btn.classList.add('girando');
   try {
     const url = ESTATICO ? 'data/pronostico.json?t=' + Date.now() : 'api/pronostico' + (forzar ? '?actualizar' : '');
-    const res = await fetch(url, { cache: 'no-store' });
+    // Sin límite, una red móvil inestable deja la app en «cargando…» indefinidamente.
+    const control = new AbortController();
+    const limite = setTimeout(() => control.abort(), ESTATICO ? 20e3 : 60e3);
+    const res = await fetch(url, { cache: 'no-store', signal: control.signal }).finally(() => clearTimeout(limite));
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || 'Error del servidor');
     datos = ESTATICO ? json : { ...json, ia: datos?.ia };
     guardar();
     pintarTodo();
   } catch (e) {
+    const motivo = e.name === 'AbortError' ? 'la conexión tardó demasiado' : e.message;
     if (!datos) {
-      $('#actual').innerHTML = `<p class="vacio">No se pudo cargar el pronóstico: ${esc(e.message)}</p>`;
+      $('#actual').innerHTML = `<p class="vacio">No se pudo cargar el pronóstico: ${esc(motivo)}. Toca ⟳ para reintentar.</p>`;
     }
-    $('#actualizado').textContent = 'sin conexión, datos guardados';
+    $('#actualizado').textContent = datos ? 'sin conexión, datos guardados' : 'sin conexión';
   } finally {
     btn.classList.remove('girando');
   }
